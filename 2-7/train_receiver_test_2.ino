@@ -36,7 +36,7 @@ void displayMessage(String message, int line) {
   lcd.setCursor(0, line);
   String spaces = String("        "); //to fill the spaces
   lcd.print(message + spaces);
-//lcd.print(message);
+  //lcd.print(message);
 }
 
 void setup()
@@ -86,21 +86,17 @@ void setup()
   pinMode(yellowLed, OUTPUT);
   pinMode(greenLed, OUTPUT);
 
-  digitalWrite(redLed, LOW);
-  digitalWrite(yellowLed, LOW);
-  digitalWrite(greenLed, LOW);
-}
-
-void loop()
-{
-
   digitalWrite(redLed, HIGH);
-  digitalWrite(greenLed, HIGH);
   digitalWrite(yellowLed, HIGH);
+  digitalWrite(greenLed, HIGH);
   delay(1000);
   digitalWrite(redLed, LOW);
   digitalWrite(greenLed, LOW);
   digitalWrite(yellowLed, LOW);
+}
+
+void loop()
+{
   if (rf95.available())
   {
     // Should be a message for us now
@@ -120,22 +116,26 @@ void loop()
       String color;
       if (!strcmp(buf, "2")) {
         digitalWrite(redLed, HIGH);
-        Serial.println("RED");
+        digitalWrite(greenLed, LOW);
+        digitalWrite(yellowLed, LOW);
         color = "RED";
       } else if (!strcmp(buf, "3")) {
         digitalWrite(greenLed, HIGH);
-        Serial.println("GREEN");
+        digitalWrite(redLed, LOW);
+        digitalWrite(yellowLed, LOW);
         color = "GREEN";
       }
       else if (!strcmp(buf, "4")) {
         digitalWrite(yellowLed, HIGH);
-        Serial.println("YELLOW");
+        digitalWrite(redLed, LOW);
+        digitalWrite(greenLed, LOW);
         color = "YELLOW";
       }
       String rssi = String(rf95.lastRssi(), DEC);
       Serial.println(rssi);
-      displayMessage("RSSI: "+rssi, 0);
+      displayMessage("RSSI: " + rssi, 0);
       displayMessage(color, 1);
+      Serial.println(color);
     }
     else
     {
